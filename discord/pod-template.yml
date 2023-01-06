@@ -4,7 +4,7 @@ metadata:
   name: "{{BOT_ID}}"
 spec:
   containers:
-    - name: "{{BOT_ID}}}}"
+    - name: "{{BOT_ID}}"
       image: marsbot-discord
       imagePullPolicy: Never
       command: [ "python", "bot.py", "{{BOT_ID}}" ]
