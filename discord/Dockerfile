@@ -6,7 +6,6 @@ WORKDIR /marsbots
 
 COPY requirements.txt requirements.txt
 COPY bot.py bot.py
-COPY util.py util.py
 COPY entrypoint.sh entrypoint.sh
 
 RUN apt-get update && apt-get install -y git

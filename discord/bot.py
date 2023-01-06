@@ -1,13 +1,14 @@
 import argparse
 import os
 from pathlib import Path
+from dataclasses import dataclass
+from typing import Optional
 
 import discord
 from discord.ext import commands
 from pymongo import MongoClient
 import yaml
-from dataclasses import dataclass
-from typing import Optional
+
 
 
 @dataclass

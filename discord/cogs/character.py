@@ -2,8 +2,7 @@ import os
 from bson import ObjectId
 import discord
 from discord.ext import commands
-from scaffolding.discord.bot import MarsBot
-from scaffolding.discord.util import (
+from marsbots.platforms.discord import (
     is_mentioned,
     remove_role_mentions,
     replace_bot_mention,
@@ -13,7 +12,7 @@ from marsbots.capabilities.character import CharacterCapability
 
 
 class CharacterCog(commands.Cog):
-    def __init__(self, bot: MarsBot) -> None:
+    def __init__(self, bot) -> None:
         self.bot = bot
         prompt = self.load_prompt()
         self.capability = CharacterCapability(

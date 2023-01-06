@@ -1,0 +1,4 @@
+py-cord
+pyyaml
+pymongo
+git+https://github.com/jmilldotdev/marsbots.git
