@@ -10,21 +10,21 @@ spec:
       command: [ "python", "bot.py", "{{BOT_ID}}" ]
       volumeMounts:
       - name: "{{BOT_ID}}"
-        mountPath: "/marsbots/{{BOT_ID}}}"
+        mountPath: "/marsbots/{{BOT_ID}}"
       terminationMessagePath: "/tmp/{{BOT_ID}}.log"
       env:
         - name: DISCORD_TOKEN
-          value: "{{DISCORD_TOKEN}}}"
+          value: "{{DISCORD_TOKEN}}"
         - name: OPENAI_API_KEY
-          value: "{{OPENAI_API_KEY}}}"
+          value: "{{OPENAI_API_KEY}}"
         - name: MONGODB_URI
-          value: "{{MONGODB_URI}}}"
+          value: "{{MONGODB_URI}}"
       resources:
         limits:
           cpu: "200m"
           memory: "200Mi"
   volumes:
-    - name: "{{BOT_ID}}}"
+    - name: "{{BOT_ID}}"
       hostPath:
-        path: "/marsbots/{{BOT_ID}}}"
+        path: "/marsbots/{{BOT_ID}}"
   restartPolicy: Never
