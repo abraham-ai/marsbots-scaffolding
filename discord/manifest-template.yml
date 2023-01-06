@@ -1,3 +1,4 @@
 id: "{{BOT_ID}}"
 name: "{{BOT_NAME}}"
 capabilities:
+  - character
