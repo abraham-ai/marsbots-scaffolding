@@ -19,6 +19,8 @@ spec:
           value: "{{OPENAI_API_KEY}}"
         - name: MONGODB_URI
           value: "{{MONGODB_URI}}"
+        - name: REDIS_URI
+          value: "{{REDIS_URI}}"
       resources:
         limits:
           cpu: "200m"

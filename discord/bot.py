@@ -10,7 +10,6 @@ from pymongo import MongoClient
 import yaml
 
 
-
 @dataclass
 class MarsbotMetadata:
     id: str
@@ -21,7 +20,7 @@ class MarsbotMetadata:
     command_prefix: Optional[str] = None
 
 
-UNLIKELY_PREFIX = "438974983724798uyfsduhfksdhfjhksdbfhjgsdyfgsdygfusd"
+UNLIKELY_PREFIX = ["438974983724798uyfsduhfksdhfjhksdbfhjgsdyfgsdygfusd"]
 
 
 def parse_manifest(bot_dir) -> MarsbotMetadata:

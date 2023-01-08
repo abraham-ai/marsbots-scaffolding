@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 from bson import ObjectId
 import discord
 from discord.ext import commands
@@ -15,13 +16,23 @@ class CharacterCog(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
         prompt = self.load_prompt()
+        if prompt is None:
+            raise Exception(
+                "No prompt found for this bot. Please add one to the database."
+            )
+        self.openai_api_key = os.getenv("OPENAI_API_KEY")
+        if self.openai_api_key is None:
+            raise Exception(
+                "No OpenAI API key found. Please set one in your .env file."
+            )
         self.capability = CharacterCapability(
             name=self.bot.metadata.name,
             prompt=prompt,
-            api_key=os.getenv("OPENAI_API_KEY"),
+            api_key=self.openai_api_key,
+            cache_connection=os.getenv("REDIS_URI"),
         )
 
-    def load_prompt(self) -> None:
+    def load_prompt(self) -> Optional[str]:
         db = self.bot.db
         personality = db.personalities.find_one({"_id": ObjectId(self.bot.metadata.id)})
         if personality:
