@@ -9,8 +9,10 @@ spec:
       imagePullPolicy: Never
       command: [ "python", "bot.py", "{{BOT_ID}}" ]
       volumeMounts:
-      - name: "{{BOT_ID}}"
-        mountPath: "/marsbots/{{BOT_ID}}"
+        - name: "manifest"
+          mountPath: "/marsbots/{{BOT_ID}}"
+        - name: "cog-character"
+          mountPath: "/marsbots/{{BOT_ID}}/cogs"
       terminationMessagePath: "/tmp/{{BOT_ID}}.log"
       env:
         - name: DISCORD_TOKEN
@@ -26,7 +28,16 @@ spec:
           cpu: "200m"
           memory: "200Mi"
   volumes:
-    - name: "{{BOT_ID}}"
-      hostPath:
-        path: "/marsbots/{{BOT_ID}}"
+    - name: "manifest"
+      configMap:
+        name: "{{BOT_ID}}-manifest"
+        items:
+          - key: "manifest.yml"
+            path: "manifest.yml"
+    - name: "cog-character"
+      configMap:
+        name: "cog-character"
+        items:
+          - key: "character.py"
+            path: "cogs/character.py"
   restartPolicy: Never
