@@ -29,7 +29,6 @@ class CharacterCog(commands.Cog):
             name=self.bot.metadata.name,
             prompt=prompt,
             api_key=self.openai_api_key,
-            cache_connection=os.getenv("REDIS_URI"),
         )
 
     def load_prompt(self) -> Optional[str]:
