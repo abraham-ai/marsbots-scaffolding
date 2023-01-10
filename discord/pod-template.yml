@@ -6,8 +6,7 @@ spec:
   serviceAccountName: marsbot-sa
   containers:
     - name: "{{BOT_ID}}"
-      image: marsbot-discord
-      imagePullPolicy: Never
+      image: "registry.aws.abraham.fun/abraham-ai/marsbots-scaffolding-discord"
       command: [ "python", "bot.py", "{{BOT_ID}}" ]
       volumeMounts:
         - name: "manifest"
