@@ -18,7 +18,7 @@ class CharacterCog(commands.Cog):
         prompt = self.load_prompt()
         if prompt is None:
             raise Exception(
-                "No prompt found for this bot. Please add one to the database."
+                "No prompt found for this bot. Please add one."
             )
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         if self.openai_api_key is None:
