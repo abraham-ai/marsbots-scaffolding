@@ -3,10 +3,9 @@ kind: Pod
 metadata:
   name: "{{BOT_ID}}"
 spec:
-  serviceAccountName: marsbot-sa
   containers:
     - name: "{{BOT_ID}}"
-      image: "registry.aws.abraham.fun/abraham-ai/marsbots-scaffolding-discord"
+      image: "registry.aws.abraham.fun/abraham-ai/marsbots-scaffolding-discord:latest"
       command: [ "python", "bot.py", "{{BOT_ID}}" ]
       volumeMounts:
         - name: "manifest"
