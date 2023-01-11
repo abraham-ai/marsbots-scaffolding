@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
     - name: "{{BOT_ID}}"
-      image: "registry.aws.abraham.fun/abraham-ai/marsbots-scaffolding-discord:latest"
+      image: "{{IMAGE_PATH}}}"
       command: [ "python", "bot.py", "{{BOT_ID}}" ]
       volumeMounts:
         - name: "manifest"
