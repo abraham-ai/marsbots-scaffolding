@@ -6,6 +6,7 @@ spec:
   containers:
     - name: "{{BOT_ID}}"
       image: "{{IMAGE_PATH}}"
+      imagePullPolicy: "{{IMAGE_PULL_POLICY}}"
       command: [ "python", "bot.py", "{{BOT_ID}}" ]
       volumeMounts:
         - name: "manifest"
