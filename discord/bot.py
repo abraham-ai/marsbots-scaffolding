@@ -27,7 +27,6 @@ def parse_manifest(bot_dir) -> MarsbotMetadata:
     manifest_path = bot_dir / "manifest.yml"
     with open(manifest_path, "r") as f:
         manifest = yaml.safe_load(f)
-        print(manifest)
     return MarsbotMetadata(**manifest)
 
 
@@ -76,7 +75,8 @@ def start(
     bot = MarsBot(metadata)
     cog_paths = [f"{bot_id}.cogs.{cog.stem}" for cog in bot_dir.glob("cogs/*.py")]
     for path in cog_paths:
-        bot.load_extension(path)
+        ext = bot.load_extension(path)
+        print("Loaded extension:", ext)
     bot.run(os.getenv("DISCORD_TOKEN"))
 
 

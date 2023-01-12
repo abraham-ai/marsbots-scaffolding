@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import Optional
 from bson import ObjectId
@@ -15,11 +16,10 @@ from marsbots.capabilities.character import CharacterCapability
 class CharacterCog(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
-        prompt = self.load_prompt()
+        # prompt = self.load_prompt()
+        prompt = "hey"
         if prompt is None:
-            raise Exception(
-                "No prompt found for this bot. Please add one."
-            )
+            raise Exception("No prompt found for this bot. Please add one.")
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         if self.openai_api_key is None:
             raise Exception(
@@ -29,6 +29,7 @@ class CharacterCog(commands.Cog):
             name=self.bot.metadata.name,
             prompt=prompt,
             api_key=self.openai_api_key,
+            cache_connection=os.getenv("REDIS_URI"),
         )
 
     def load_prompt(self) -> Optional[str]:
@@ -40,6 +41,7 @@ class CharacterCog(commands.Cog):
     @commands.Cog.listener("on_message")
     async def on_message(self, message: discord.Message) -> None:
         if (is_mentioned(message, self.bot.user)) and not message.author.bot:
+            print("Handling reply")
             ctx = await self.bot.get_context(message)
             async with ctx.channel.typing():
                 message_content = self.message_preprocessor(message)
@@ -47,6 +49,7 @@ class CharacterCog(commands.Cog):
                     message_content, sender_name="M"
                 )
                 await message.reply(completion)
+                print("Reply sent")
 
     def message_preprocessor(self, message: discord.Message) -> str:
         message_content = replace_bot_mention(message.content, only_first=True)
