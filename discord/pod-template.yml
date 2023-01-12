@@ -39,5 +39,5 @@ spec:
         name: "cog-character"
         items:
           - key: "character.py"
-            path: "cogs/character.py"
+            path: "character.py"
   restartPolicy: Never
