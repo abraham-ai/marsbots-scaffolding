@@ -16,8 +16,7 @@ from marsbots.capabilities.character import CharacterCapability
 class CharacterCog(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
-        # prompt = self.load_prompt()
-        prompt = "hey"
+        prompt = self.load_prompt()
         if prompt is None:
             raise Exception("No prompt found for this bot. Please add one.")
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
