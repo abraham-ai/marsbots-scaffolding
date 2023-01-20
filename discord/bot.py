@@ -93,7 +93,7 @@ class MarsBot(commands.Bot):
 def start(
     bot_id: str,
 ) -> None:
-    print("Launching bot...")
+    print("Launching bot....")
     bot = MarsBot(bot_id)
     bot.run(os.getenv("DISCORD_TOKEN"))
 
