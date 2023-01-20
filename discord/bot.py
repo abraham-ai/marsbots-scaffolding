@@ -2,8 +2,6 @@ import argparse
 from dataclasses import fields
 import os
 from bson import ObjectId
-from importlib import import_module
-import bson
 
 import discord
 from discord.ext import commands
@@ -15,7 +13,7 @@ from marsbots.platforms.discord.transformers import (
     transform_check,
     transform_trigger,
 )
-from marsbots_launcher.models import Personality
+from marsbots.models import Personality
 from pymongo import MongoClient
 
 
@@ -61,7 +59,7 @@ class MarsBot(commands.Bot):
             k: v for k, v in personality_doc.items() if k in personality_fields
         }
         self.metadata = MarsbotMetadata(
-            name=self.personality["name"],
+            name=personality_doc["name"],
         )
         return filtered_personality_doc
 
@@ -86,7 +84,8 @@ class MarsBot(commands.Bot):
                     if not check(message):
                         await message.reply("This command is not available here.")
                         return
-                await capability.behavior.call(self, message)
+                for behavior in capability.behaviors:
+                    await behavior.call(self, message)
 
         await self.process_commands(message)
 
