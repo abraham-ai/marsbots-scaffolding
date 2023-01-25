@@ -17,7 +17,7 @@ from marsbots.models import Personality
 from pymongo import MongoClient
 
 
-UNLIKELY_PREFIX = ["438974983724798uyfsduhfksdhfjhksdbfhjgsdyfgsdygfusd"]
+UNLIKELY_PREFIX = ["438974983724798uyfsduhfksdhfjhksdbfhjgsdyfgsdygfusfd"]
 
 
 class MarsBot(commands.Bot):
