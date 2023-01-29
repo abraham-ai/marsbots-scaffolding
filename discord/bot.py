@@ -5,15 +5,15 @@ from bson import ObjectId
 
 import discord
 from discord.ext import commands
-from marsbots.models import Capability
+from marsbots.models import Command
 from marsbots.platforms.discord.externals import init_llm
 from marsbots.platforms.discord.models import MarsbotMetadata
 from marsbots.platforms.discord.transformers import (
-    transform_behavior,
-    transform_check,
+    transform_capability,
+    transform_modifier,
     transform_trigger,
 )
-from marsbots.models import Personality
+from marsbots.models import Character
 from pymongo import MongoClient
 
 
@@ -27,14 +27,14 @@ class MarsBot(commands.Bot):
         client = MongoClient(os.getenv("MONGODB_URI"))
         self.db = client["marsbots"]
 
-        self.personality = self.get_personality()
+        self.character = self.get_character()
 
         intents = discord.Intents.default()
         self.set_intents(intents)
 
         self.llm = init_llm()
 
-        self.capabilities = list(self.build_capabilities())
+        self.capabilities = list(self.build_commands())
 
         super().__init__(
             command_prefix=UNLIKELY_PREFIX,
@@ -50,27 +50,30 @@ class MarsBot(commands.Bot):
             if "members" in self.metadata.intents:
                 intents.members = True
 
-    def get_personality(self):
-        personality_doc = self.db.personalities.find_one({"_id": ObjectId(self.bot_id)})
-        if not personality_doc:
-            raise ValueError(f"Personality {self.bot_id} not found.")
-        personality_fields = {f.name: f for f in fields(Personality)}
-        filtered_personality_doc = {
-            k: v for k, v in personality_doc.items() if k in personality_fields
+    def get_character(self):
+        character_doc = self.db.characters.find_one({"_id": ObjectId(self.bot_id)})
+        if not character_doc:
+            raise ValueError(f"Character {self.bot_id} not found.")
+        character_fields = {f.name: f for f in fields(Character)}
+        filtered_character_doc = {
+            k: v for k, v in character_doc.items() if k in character_fields
         }
         self.metadata = MarsbotMetadata(
-            name=personality_doc["name"],
+            name=character_doc["name"],
         )
-        return filtered_personality_doc
+        return filtered_character_doc
 
-    def build_capabilities(self):
-        for capability in self.personality["capabilities"]:
-            trigger = transform_trigger(capability["trigger"])
-            checks = [transform_check(check) for check in capability["checks"]]
-            behaviors = [
-                transform_behavior(behavior) for behavior in capability["behaviors"]
+    def build_commands(self):
+        for command in self.character["commands"]:
+            trigger = transform_trigger(command["trigger"])
+            modifiers = [transform_modifier(check) for check in command["modifiers"]]
+            capabilities = [
+                transform_capability(capability)
+                for capability in command["capabilities"]
             ]
-            yield Capability(trigger=trigger, checks=checks, behaviors=behaviors)
+            yield Command(
+                trigger=trigger, modifiers=modifiers, capabilities=capabilities
+            )
 
     async def on_ready(self) -> None:
         print(f"Running {self.metadata.name}...")
@@ -80,12 +83,12 @@ class MarsBot(commands.Bot):
             return
         for capability in self.capabilities:
             if capability.trigger(self, message):
-                for check in capability.checks:
-                    if not check(message):
+                for modifier in capability.modifiers:
+                    if not modifier(message):
                         await message.reply("This command is not available here.")
                         return
-                for behavior in capability.behaviors:
-                    await behavior.call(self, message)
+                for capability in capability.capabilities:
+                    await capability.call(self, message)
 
         await self.process_commands(message)
 
